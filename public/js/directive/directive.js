@@ -25,11 +25,13 @@ angular.module('mainDirectives', [])
             	"sharing knowledge in the society via internet."
 		})
 .controller('profileController',
-		function($scope, $window, $rootScope, userService, $filter) {
+		function($scope, $window, $rootScope, userService, $filter, $http) {
 		userService.getUser().then(function(data,err){
 			if(data!=null){
 				$rootScope.user=data.data;
-				//console.log($rootScope.user);
+				$scope.selectedState = $rootScope.user.profile.address.state;
+				$scope.selectedCity = $rootScope.user.profile.address.city;
+				//console.log($rootScope.user.address);
 				userService.getUserId().then(function(data,err){
 				$scope.__id=data.data.id;
 			})
@@ -37,22 +39,42 @@ angular.module('mainDirectives', [])
 		/* - - - For Editing basic info | When edit is clicked ---*/ 
 		$scope.edit = false;
 		$scope.editBasicInformation = function(){
-			$scope.prev = $rootScope.user;
 			$scope.edit = true;
+			$scope.prev = $rootScope.user.profile.address;
 		}
 		$scope.cancelBasic = function(){
-			$rootScope.user = $scope.prev;
-			$scope.prev={};
-			$scope.selectedState = null;
-			$scope.selectedCity = null;
+			userService.getUser().then(function(data,err){
+				if(data!=null){
+					$rootScope.user=data.data;
+					userService.getUserId().then(function(data,err){
+					$scope.__id=data.data.id;
+				})
+			}})
 			$scope.edit = false;
 		}
-		$scope.submitBasicInformation = function(){
+		$scope.submitBasic = function(){
 			$scope.prev = {};
-			$scope.edit = false;
+			$scope.address={city:$scope.selectedCity, state:$scope.selectedState, about : $rootScope.user.profile.address.about};
+			console.log($scope.address);
+			$http.put('/api/v1/user/me/updateInfo',$scope.address)
+			.success(function(data){
+				console.log(data);
+				userService.getUser().then(function(data,err){
+					if(data!=null){
+						$rootScope.user=data.data;
+						userService.getUserId().then(function(data,err){
+						$scope.__id=data.data.id;
+					})
+				}})
+				$scope.edit = false;
+			})
+			.error(function(data){
+				console.log(data);
+			})
+			
 		}
 		/* - - - -  Loading of States and Cities - - - - - */
-		$scope.selectedState = null;
+		
 		$scope.states = [{ id: 1, name: 'Maharashtra' },
 		                { id: 2, name: 'Odisha' },
 		                { id: 3, name: 'Jharkhand' },
@@ -69,7 +91,7 @@ angular.module('mainDirectives', [])
 			else return false;
 		}
 		$scope.change = function(val){$scope.selectedState = val;}
-		$scope.changeCity = function(val){$scope.selectedCity = val; console.log(val)}
+		$scope.changeCity = function(val){$scope.selectedCity = val;}
 		$scope.cities = [
 		             	{"city":"Kolhapur", "state":"Maharashtra"},
 		             	{"city":"Port Blair", "state":"Andaman & Nicobar Islands"},
@@ -992,63 +1014,63 @@ angular.module('mainDirectives', [])
 		             	{"city":"Tuensang", "state":"Nagaland"},
 		             	{"city":"Wokha", "state":"Nagaland"},
 		             	{"city":"Zunheboto", "state":"Nagaland"},
-		             	{"city":"Anandapur", "state":"Orissa"},
-		             	{"city":"Anugul", "state":"Orissa"},
-		             	{"city":"Asika", "state":"Orissa"},
-		             	{"city":"Balangir", "state":"Orissa"},
-		             	{"city":"Balasore", "state":"Orissa"},
-		             	{"city":"Baleshwar", "state":"Orissa"},
-		             	{"city":"Bamra", "state":"Orissa"},
-		             	{"city":"Barbil", "state":"Orissa"},
-		             	{"city":"Bargarh", "state":"Orissa"},
-		             	{"city":"Bargarh", "state":"Orissa"},
-		             	{"city":"Baripada", "state":"Orissa"},
-		             	{"city":"Basudebpur", "state":"Orissa"},
-		             	{"city":"Belpahar", "state":"Orissa"},
-		             	{"city":"Bhadrak", "state":"Orissa"},
-		             	{"city":"Bhawanipatna", "state":"Orissa"},
-		             	{"city":"Bhuban", "state":"Orissa"},
-		             	{"city":"Bhubaneswar", "state":"Orissa"},
-		             	{"city":"Biramitrapur", "state":"Orissa"},
-		             	{"city":"Brahmapur", "state":"Orissa"},
-		             	{"city":"Brajrajnagar", "state":"Orissa"},
-		             	{"city":"Byasanagar", "state":"Orissa"},
-		             	{"city":"Cuttack", "state":"Orissa"},
-		             	{"city":"Debagarh", "state":"Orissa"},
-		             	{"city":"Dhenkanal", "state":"Orissa"},
-		             	{"city":"Gunupur", "state":"Orissa"},
-		             	{"city":"Hinjilicut", "state":"Orissa"},
-		             	{"city":"Jagatsinghapur", "state":"Orissa"},
-		             	{"city":"Jajapur", "state":"Orissa"},
-		             	{"city":"Jaleswar", "state":"Orissa"},
-		             	{"city":"Jatani", "state":"Orissa"},
-		             	{"city":"Jeypur", "state":"Orissa"},
-		             	{"city":"Jharsuguda", "state":"Orissa"},
-		             	{"city":"Joda", "state":"Orissa"},
-		             	{"city":"Kantabanji", "state":"Orissa"},
-		             	{"city":"Karanjia", "state":"Orissa"},
-		             	{"city":"Kendrapara", "state":"Orissa"},
-		             	{"city":"Kendujhar", "state":"Orissa"},
-		             	{"city":"Khordha", "state":"Orissa"},
-		             	{"city":"Koraput", "state":"Orissa"},
-		             	{"city":"Malkangiri", "state":"Orissa"},
-		             	{"city":"Nabarangapur", "state":"Orissa"},
-		             	{"city":"Paradip", "state":"Orissa"},
-		             	{"city":"Parlakhemundi", "state":"Orissa"},
-		             	{"city":"Pattamundai", "state":"Orissa"},
-		             	{"city":"Phulabani", "state":"Orissa"},
-		             	{"city":"Puri", "state":"Orissa"},
-		             	{"city":"Rairangpur", "state":"Orissa"},
-		             	{"city":"Rajagangapur", "state":"Orissa"},
-		             	{"city":"Raurkela", "state":"Orissa"},
-		             	{"city":"Rayagada", "state":"Orissa"},
-		             	{"city":"Sambalpur", "state":"Orissa"},
-		             	{"city":"Soro", "state":"Orissa"},
-		             	{"city":"Sunabeda", "state":"Orissa"},
-		             	{"city":"Sundargarh", "state":"Orissa"},
-		             	{"city":"Talcher", "state":"Orissa"},
-		             	{"city":"Titlagarh", "state":"Orissa"},
-		             	{"city":"Umarkote", "state":"Orissa"},
+		             	{"city":"Anandapur", "state":"Odisha"},
+		             	{"city":"Anugul", "state":"Odisha"},
+		             	{"city":"Asika", "state":"Odisha"},
+		             	{"city":"Balangir", "state":"Odisha"},
+		             	{"city":"Balasore", "state":"Odisha"},
+		             	{"city":"Baleshwar", "state":"Odisha"},
+		             	{"city":"Bamra", "state":"Odisha"},
+		             	{"city":"Barbil", "state":"Odisha"},
+		             	{"city":"Bargarh", "state":"Odisha"},
+		             	{"city":"Bargarh", "state":"Odisha"},
+		             	{"city":"Baripada", "state":"Odisha"},
+		             	{"city":"Basudebpur", "state":"Odisha"},
+		             	{"city":"Belpahar", "state":"Odisha"},
+		             	{"city":"Bhadrak", "state":"Odisha"},
+		             	{"city":"Bhawanipatna", "state":"Odisha"},
+		             	{"city":"Bhuban", "state":"Odisha"},
+		             	{"city":"Bhubaneswar", "state":"Odisha"},
+		             	{"city":"Biramitrapur", "state":"Odisha"},
+		             	{"city":"Brahmapur", "state":"Odisha"},
+		             	{"city":"Brajrajnagar", "state":"Odisha"},
+		             	{"city":"Byasanagar", "state":"Odisha"},
+		             	{"city":"Cuttack", "state":"Odisha"},
+		             	{"city":"Debagarh", "state":"Odisha"},
+		             	{"city":"Dhenkanal", "state":"Odisha"},
+		             	{"city":"Gunupur", "state":"Odisha"},
+		             	{"city":"Hinjilicut", "state":"Odisha"},
+		             	{"city":"Jagatsinghapur", "state":"Odisha"},
+		             	{"city":"Jajapur", "state":"Odisha"},
+		             	{"city":"Jaleswar", "state":"Odisha"},
+		             	{"city":"Jatani", "state":"Odisha"},
+		             	{"city":"Jeypur", "state":"Odisha"},
+		             	{"city":"Jharsuguda", "state":"Odisha"},
+		             	{"city":"Joda", "state":"Odisha"},
+		             	{"city":"Kantabanji", "state":"Odisha"},
+		             	{"city":"Karanjia", "state":"Odisha"},
+		             	{"city":"Kendrapara", "state":"Odisha"},
+		             	{"city":"Kendujhar", "state":"Odisha"},
+		             	{"city":"Khordha", "state":"Odisha"},
+		             	{"city":"Koraput", "state":"Odisha"},
+		             	{"city":"Malkangiri", "state":"Odisha"},
+		             	{"city":"Nabarangapur", "state":"Odisha"},
+		             	{"city":"Paradip", "state":"Odisha"},
+		             	{"city":"Parlakhemundi", "state":"Odisha"},
+		             	{"city":"Pattamundai", "state":"Odisha"},
+		             	{"city":"Phulabani", "state":"Odisha"},
+		             	{"city":"Puri", "state":"Odisha"},
+		             	{"city":"Rairangpur", "state":"Odisha"},
+		             	{"city":"Rajagangapur", "state":"Odisha"},
+		             	{"city":"Raurkela", "state":"Odisha"},
+		             	{"city":"Rayagada", "state":"Odisha"},
+		             	{"city":"Sambalpur", "state":"Odisha"},
+		             	{"city":"Soro", "state":"Odisha"},
+		             	{"city":"Sunabeda", "state":"Odisha"},
+		             	{"city":"Sundargarh", "state":"Odisha"},
+		             	{"city":"Talcher", "state":"Odisha"},
+		             	{"city":"Titlagarh", "state":"Odisha"},
+		             	{"city":"Umarkote", "state":"Odisha"},
 		             	{"city":"Karaikal", "state":"Pondicherry"},
 		             	{"city":"Mahe", "state":"Pondicherry"},
 		             	{"city":"Pondicherry", "state":"Pondicherry"},

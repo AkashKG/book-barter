@@ -17,6 +17,24 @@ module.exports = function(wagner) {
 			}
 		}
 	}));
+	api.put('/user/me/updateInfo', wagner.invoke(function(User){
+		return function(req, res){
+			if(req.user._id){
+				console.log(req.body);
+				User.update({_id:req.user._id},{$set:{'profile.address':req.body}}, function(err,done){
+					//console.log(err);
+					if(err){
+						res.json({error:'Something went wrong'})
+					}
+					console.log(done);
+					res.json({success:'Success'})
+				})
+			}
+			else{
+				return res.status(status.UNAUTHORIZED).json({error:'Unauthorized access, your account will be reported'});	
+			}
+		}
+	}))
 	api.get('/user/me/id',wagner.invoke(function(User){
 		return function(req,res){
 			if(req.user==undefined){

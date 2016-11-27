@@ -9,8 +9,16 @@ var userSchema={
 		picture:{
 			type:String
 		},
-		city:{
-			type:String
+		address:{
+			city:{
+				type:String
+			},
+			state:{
+				type:String
+			},
+			about:{
+				type:String
+			}
 		},
 		gender:{
 			type:String

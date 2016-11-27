@@ -17,7 +17,7 @@ angular
 						function($rootScope, $location, userService,
 								dialogFactory) {
 							userService.getUser().then(function(data) {
-								//console.log(data.data);
+								console.log(data.data);
 								if(data.data.profile){
 									$rootScope.isLoggedIn = true;
 									$rootScope.user=data.data.profile;

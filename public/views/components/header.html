@@ -26,7 +26,7 @@
   							</md-list-item> 
   							<md-list-item ng-click="">
     							<md-icon>place</md-icon>
-    							<p> KIIT University, Bhubaneswar </p>
+    							<p> {{user.profile.address.city}}, {{user.profile.address.state}} </p>
   							</md-list-item> 
 						</md-list> 
 						<md-card-actions layout="row" layout-align="center center">
@@ -52,11 +52,11 @@
 								<div layout="row" flex>
 								<span flex="50">
 								
-    <md-select placeholder="State" ng-model="selectedState" >
+    <md-select placeholder="State" ng-model="user.profile.address.state" >
       <md-option value="{{state.name}}" ng-repeat="state in states" ng-click = "change(state.name)">{{state.name}}</md-option>
     </md-select>
     </span><span flex="50">
-    			<md-select placeholder="City" ng-model="selectedCity" ng-disabled ="isSelected()" ng-click="selectCities()" >
+    			<md-select placeholder="City" ng-model="user.profile.address.city" ng-disabled ="isSelected()" ng-click="selectCities()" >
       <md-option value="{{city.city}}" ng-repeat = "city in getCity()" ng-click = "changeCity(city.city)">{{city.city}}</md-option>
     </md-select>
     </span>

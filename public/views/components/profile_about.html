@@ -1,12 +1,18 @@
-<md-content>
+<md-content ng-if="edit == false">
 			<md-card>
 			<md-subheader class="md-no-sticky">About me</md-subheader>
 				<md-list class="md-dense">
 				<md-list-item ng-click="">
-    				<p class="md-body-1" style="text-align:justify"> Currently a 7th semester(B.Tech, Computer Science) student at KIIT University. I love coding, whether it's <a ng-href="https://github.com/AkashKG/data-structure" style="text-decoration:none"target="_blank">Data Structure</a> or a web-app.
-    				I like building things, shaping it to real existence.  <br>
-<span >When I'm not sitting behind my laptop, I enjoy nature, movies, listening music, and to some extent sketching.</span>
+    				<p class="md-body-1" style="text-align:justify"> 
+    				{{user.profile.address.about}}
     				</p>
   					</md-list-item> </md-list>
 			</md-card>
 			</md-content>
+			<form ng-if="edit == true">
+			  <md-input-container class="md-block">
+          <label>About you</label>
+          <textarea ng-model="user.profile.address.about" md-maxlength="1500" rows="4" md-select-on-focus></textarea>
+        </md-input-container>
+
+      </form>
