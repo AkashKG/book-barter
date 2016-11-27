@@ -17,22 +17,19 @@ angular
 						function($rootScope, $location, userService,
 								dialogFactory) {
 							userService.getUser().then(function(data) {
-								console.log(data.data);
-								if(data.data.user){
+								//console.log(data.data);
+								if(data.data.profile){
 									$rootScope.isLoggedIn = true;
-									$rootScope.user=data.data.user;
-									console.log($rootScope.user)
+									$rootScope.user=data.data.profile;
+									//console.log($rootScope.user)
 									if ($location.path() === '/'||$location.path() === '/login'){
 										$location.path('/profile')
 									}
 								}	
 								else{
 									$rootScope.isLoggedin=false;
-									if($location.path()=='/'||$location.path()=='/AkashGupta'||$location.path()=='/resume'){
-										
-									}
-									else if($location.path()!='/login'){
-										$location.path('/login');
+									if($location.path()!='/'){
+										$location.path('/');
 									}
 								}
 							}, function(err) {
@@ -78,7 +75,7 @@ angular
 			};
 		})
 
-		.service(
+	.service(
 				'userService',
 				[
 						'$q',
@@ -88,8 +85,20 @@ angular
 						function($q, $http, $rootScope, $location) {
 							return {
 								getUser : function() {
-									return $http.get('api/v1/me').success(
+									return $http.get('api/v1/user/me').success(
 											function(data) {
+													//console.log(data);
+													return data;
+											}).error(function(data, status) {
+										if (status = status.UNAUTHORIZED) {
+											return null
+										}
+									});
+								},
+								getUserId : function() {
+									return $http.get('api/v1/user/me/id').success(
+											function(data) {
+													//console.log(data);
 													return data;
 											}).error(function(data, status) {
 										if (status = status.UNAUTHORIZED) {
@@ -99,6 +108,7 @@ angular
 								}
 							};
 						} ])
+
 						
 	.factory('logoutFactory', [ '$q', '$timeout', '$http', '$rootScope',
 		function($q, $timeout, $http, $rootScope) {

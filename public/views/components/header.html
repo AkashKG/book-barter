@@ -1,0 +1,83 @@
+		<md-content layout=column>
+			
+		<div layout="row" layout-align="center center">
+			<md-card style="margin-top: 30px;""> <img
+				ng-src="{{user.profile.picture}}" alt="profile_pic"
+				style="position: relative; border-radius: 4px; padding: 5px 5px 5px 5px; height: 128px; width: 128px; border-color: '#fff'; border-width: 10px;"></img>
+			</md-card>
+		</div>
+		<div layout="row" layout-align="center center">
+			<span class="md-headline">{{user.profile.name}}</span>
+		</div>
+	
+			</md-content>
+			<!-- Start | -> without edit clicked -->
+			<md-content layout="column" >
+				<md-card style="background-color:#ECEFF1;" ng-if="edit == false"> 
+					<md-subheader class="md-no-sticky">Basic Information</md-subheader>
+						<md-list class="md-dense"> 
+							<md-list-item ng-click="">
+    							<md-icon>person</md-icon>
+    							<p> {{user.profile.name}} </p>
+  							</md-list-item> 
+  							<md-list-item ng-click="">
+    							<md-icon>email</md-icon>
+    							<p> {{user.profile.data.email}} </p>
+  							</md-list-item> 
+  							<md-list-item ng-click="">
+    							<md-icon>place</md-icon>
+    							<p> KIIT University, Bhubaneswar </p>
+  							</md-list-item> 
+						</md-list> 
+						<md-card-actions layout="row" layout-align="center center">
+          <md-button  aria-label="Favorite" class="md-primary" ng-click = editBasicInformation()>
+            Edit
+          </md-button>
+             </md-card-actions>
+          <!-- End | without edit clicked -->
+          <!-- Start | On Editing -->
+          	</md-card>
+          	<md-card ng-if="edit == true">
+          	<md-card-content>
+          <form id ="basic" >
+				<div layout="column">
+        				<md-input-container flex class="md-block">
+								<label>Name</label> 
+									<input ng-maxlength="100"  ng-disabled = "true" name="name" ng-model="user.profile.name">
+								</md-input-container>
+								<md-input-container flex class="md-block" >
+									<label>Email</label> 
+									<input ng-maxlength="100" ng-disabled = "true"  name="email" type = "email" ng-model="user.profile.data.email">
+								</md-input-container>
+								<div layout="row" flex>
+								<span flex="50">
+								
+    <md-select placeholder="State" ng-model="selectedState" >
+      <md-option value="{{state.name}}" ng-repeat="state in states" ng-click = "change(state.name)">{{state.name}}</md-option>
+    </md-select>
+    </span><span flex="50">
+    			<md-select placeholder="City" ng-model="selectedCity" ng-disabled ="isSelected()" ng-click="selectCities()" >
+      <md-option value="{{city.city}}" ng-repeat = "city in getCity()" ng-click = "changeCity(city.city)">{{city.city}}</md-option>
+    </md-select>
+    </span>
+    </div>
+								</div>
+								
+								
+								</md-card-content>
+								<md-card-actions layout="row" layout-align="center center">
+         <md-button  aria-label="Favorite" class="md-warn md-raised" ng-click = cancelBasic()>
+            Cancel
+          </md-button>
+          <md-button  aria-label="Favorite" class="md-primary md-raised" ng-click = submitBasic() >
+            Submit
+          </md-button>
+          
+             </md-card-actions>
+								</md-card>
+								
+							</form>
+     
+			 
+				 
+				</md-content>

@@ -1,1 +1,20 @@
-<barter-header></barter-header>
+
+
+<div flex layout="column"
+	style="background-size: cover; background-repeat: no-repeat; background-position: center center;">
+	<!-- DIVIDE THE PAGE IN THE RATIO 25:75 FOR FLEX -->
+	<div flex layout="row" layout-xs="column" layout-sm="row">
+		<div flex-gt-sm="25" flex-xs flex-sm="40" layout="column">
+			<!-- Custom Directive -->
+			<barter-header></barter-header>		
+		</div>
+		<div flex="" layout="column" >
+			<barter-about></barter-about>
+					
+		</div>
+		
+	</div>
+	<div flex layout="row" layout-xs="column" layout-sm="row">
+		
+	</div>
+</div>
