@@ -1,0 +1,25 @@
+<md-toolbar class="md-whiteframe-2dp" md-scroll-shrink ng-if="true">
+   	<div class="md-toolbar-tools" style="padding:0 0px">
+        <md-button hide-xs class="md-icon-button" aria-label="More" >
+          <md-icon >home</md-icon>
+        </md-button>
+        <div  ng-cloak>
+        	<h5 class="md-subhead">Book Barter</h5>
+        </div>
+      	<span flex></span>
+      	<div >
+        	<md-button aria-label="google"
+				class="md-icon-button" ng-click="googleLogin()" ng-hide="isLoggedIn" 
+				target="_self"><md-icon md-svg-src="google"> </md-icon></md-button>
+        	<md-button aria-label="twitter" class="md-icon-button" ng-click="twitterLogin()" ng-hide="isLoggedIn" 
+				target="_self"> <md-icon md-svg-src="twitter"></md-icon></md-button>
+			<md-button aria-label="facebook" ng-hide="isLoggedIn" 
+				class="md-icon-button" ng-click="facebookLogin()"
+				target="_self"><md-icon md-svg-src="facebook"> </md-icon></md-button>
+			<md-button class="md-icon-button" ng-show="isLoggedIn" ng-click="logout()"aria-label="Favorite" >
+      			<md-tooltip md-direction="bottom">logout</md-tooltip>
+          		<md-icon>vpn_key</md-icon>
+        	</md-button>
+        </div>
+	</div>
+</md-toolbar>
