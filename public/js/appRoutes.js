@@ -6,9 +6,13 @@ angular.module('appRoutes', []).config(
 						templateUrl : 'views/pages/home.html',
 						controller : 'homeController'
 					})
+					.when('/login', {
+						templateUrl : 'views/pages/home.html',
+						controller : 'homeController'
+					})
 					.when('/profile',{
 						templateUrl:'views/pages/profile.html',
-						//controller: 'profileController'
+						controller: 'profileController'
 					})
 					.when('/profile/alltodos/:user/:nIndex/:index', {
 						templateUrl : 'views/notebook/todopage.html',

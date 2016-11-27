@@ -7,8 +7,7 @@
 		<title>Book Barter</title>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" type='text/css'>
-		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css"></head>
-		<link rel="stylesheet" href="//cdn.materialdesignicons.com/1.7.22/css/materialdesignicons.min.css">
+		<link rel="stylesheet" href="bower_components/angular-material/angular-material.css"></head>
 		<div ng-app="barterApp">
 		<!-- Directive: Barter Bar -->
 			<barter-bar></barter-bar>
@@ -23,6 +22,23 @@
   	<script type="text/javascript" src="app.js"></script>
   	<script type="text/javascript" src="js/appRoutes.js"></script>
   	<script type="text/javascript" src="js/directive/directive.js"></script>
+  	<script type="text/javascript">
+    if (window.location.hash && window.location.hash == '#_=_') {
+        if (window.history && history.pushState) {
+            window.history.pushState("", document.title, window.location.pathname);
+        } else {
+            // Prevent scrolling by storing the page's current scroll offset
+            var scroll = {
+                top: document.body.scrollTop,
+                left: document.body.scrollLeft
+            };
+            window.location.hash = '';
+            // Restore the scroll offset, should be flicker free
+            document.body.scrollTop = scroll.top;
+            document.body.scrollLeft = scroll.left;
+        }
+    }
+	</script>
   	
 </html>
   

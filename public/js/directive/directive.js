@@ -19,9 +19,14 @@ angular.module('mainDirectives', [])
 		})
 .controller('homeController',
 		function($scope, $window, $rootScope) {
-			$scope.temp = "Buddy";
+		
 		})
-
+.directive('barterHeader', function(){
+	return {
+		templateUrl: './views/components/header.html',
+		controller: 'headerController'
+	}
+})
 .directive('barterBar', function() {
   return {
     templateUrl: './views/components/toolbar.html',
