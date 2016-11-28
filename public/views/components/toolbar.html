@@ -1,6 +1,6 @@
 <md-toolbar class="md-whiteframe-2dp" md-scroll-shrink ng-if="true">
    	<div class="md-toolbar-tools" style="padding:0 0px">
-        <md-button hide-xs class="md-icon-button" aria-label="More" >
+        <md-button hide-xs class="md-icon-button"  aria-label="More" >
           <md-icon >home</md-icon>
         </md-button>
         <div  ng-cloak>
@@ -16,6 +16,14 @@
 			<md-button aria-label="facebook" ng-hide="isLoggedIn" 
 				class="md-icon-button" ng-click="facebookLogin()"
 				target="_self"><md-icon md-svg-src="facebook"> </md-icon></md-button>
+			<md-button class="md-icon-button" ng-show="isLoggedIn" ng-href="/profile" aria-label="Favorite" >
+      			<md-tooltip md-direction="bottom">Profile</md-tooltip>
+          		<md-icon>person</md-icon>
+        	</md-button>
+			<md-button class="md-icon-button" ng-show="isLoggedIn" ng-href="/feed" aria-label="Favorite" >
+      			<md-tooltip md-direction="bottom">Feed</md-tooltip>
+          		<md-icon>dashboard</md-icon>
+        	</md-button>
 			<md-button class="md-icon-button" ng-show="isLoggedIn" ng-click="logout()"aria-label="Favorite" >
       			<md-tooltip md-direction="bottom">logout</md-tooltip>
           		<md-icon>vpn_key</md-icon>

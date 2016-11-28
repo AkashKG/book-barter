@@ -12,7 +12,7 @@ module.exports = function(wagner) {
 				return res.json({error:'Not logged in.'});			
 			}
 			else{
-				//console.log(req.user.profile);
+				// console.log(req.user.profile);
 				res.json({profile:req.user.profile});
 			}
 		}
@@ -24,7 +24,7 @@ module.exports = function(wagner) {
 				return res.json({error:'Not logged in.'});			
 			}
 			else{
-				//console.log(req.user.bookList);
+				// console.log(req.user.bookList);
 				res.json({books:req.user.bookList});
 			}
 		}
@@ -56,7 +56,7 @@ module.exports = function(wagner) {
 			if(req.user._id){
 				console.log(req.body);
 				User.update({_id:req.user._id},{$set:{'profile.address':req.body}}, function(err,done){
-					//console.log(err);
+					// console.log(err);
 					if(err){
 						res.json({error:'Something went wrong'})
 					}
@@ -75,7 +75,7 @@ module.exports = function(wagner) {
 				return res.json({error:'Not logged in.'});			
 			}
 			else{
-				//console.log(req.user.profile);
+				// console.log(req.user.profile);
 				res.json({id:req.user._id});
 			}
 		}
@@ -93,6 +93,15 @@ module.exports = function(wagner) {
 			model : 'Book'
 		}, handleOne.bind(null, 'user', res));
 	});
+	/* Optimize Further */
+	api.get('/universe/book/:query', wagner.invoke(function(User, Book) {// done
+		return function(req, res) {
+			User.find({},{profile:0, _id:0, 'bookList': {$elemMatch: {'info.title': req.params.query}}}, function(err, data){
+				res.json({data:data});
+			})
+		};
+	}));
+	
 	api.delete('/user/book/:id/:__id', wagner.invoke(function(User){// done
 		return function(req, res){
 			if(req.user._id == req.params.__id){

@@ -14,9 +14,9 @@ angular.module('appRoutes', []).config(
 						templateUrl:'views/pages/profile.html',
 						controller: 'profileController'
 					})
-					.when('/profile/alltodos/:user/:nIndex/:index', {
-						templateUrl : 'views/notebook/todopage.html',
-						controller : 'todoController'
+					.when('/feed',{
+						templateUrl:'views/pages/home.html',
+						controller: 'homeController'
 					})
 					$locationProvider.html5Mode(true);
 

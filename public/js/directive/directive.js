@@ -16,13 +16,24 @@ angular.module('mainDirectives', [])
 					$window.open('/login','_self');
 				});
 			};
+			
 		})
 .controller('homeController',
-		function($scope, $window, $rootScope) {
+		function($scope, $window, $rootScope, $http, userService, $filter) {
 			$scope.about = "The Book Barter web-app is a new platform to share the books. Long gone are the days when people will wait for a book " +
             	"to arrive in stock or waiting for price to drop for purchasing book. This website encourages people to share books for free according to their requirements." + 
             	" This is the era where internet has become a part of social culture. People are connected to each other via internet nowadays, so our creative team thought of "+
             	"sharing knowledge in the society via internet."
+            	$scope.query="";
+            	
+				$scope.search=function(){
+				userService.getSomeBooks("we").then(function(data, err){
+            		$scope.searched = data.data.data;
+					$scope.searchedBooks = $filter('filter')($scope.searched, $scope.query);
+					console.log($scope.searchedBooks);
+				})
+				}
+            
 		})
 .controller('bookPreviewController',
 		function($scope, $rootScope, userService, $http, dialogFactory, $mdDialog) {
@@ -224,10 +235,10 @@ angular.module('mainDirectives', [])
 		$scope.submitBasic = function(){
 			$scope.prev = {};
 			$scope.address={city:$scope.selectedCity, state:$scope.selectedState, about : $rootScope.user.profile.address.about};
-			console.log($scope.address);
+			//console.log($scope.address);
 			$http.put('/api/v1/user/me/updateInfo',$scope.address)
 			.success(function(data){
-				console.log(data);
+				//console.log(data);
 				userService.getUser().then(function(data,err){
 					if(data!=null){
 						$rootScope.user=data.data;

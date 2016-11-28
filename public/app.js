@@ -121,6 +121,16 @@ angular
 								},
 								getBookById : function(id) {
 									return $filter('filter')(books, id);
+								},
+								getSomeBooks : function(query) {
+									return $http.get('/api/v1/universe/book/' + query).success(
+											function(data) {
+													return data;
+											}).error(function(data, status) {
+										if (status = status.UNAUTHORIZED) {
+											return null
+										}
+									});
 								}
 							};
 						} ])
