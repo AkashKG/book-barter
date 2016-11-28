@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var Todo = require('./todo');
+var Book = require('./book');
 
 var userSchema={
 	profile:{
@@ -32,7 +32,7 @@ var userSchema={
 			}
 		}
 	},
-	todoList:[Todo.todoSchema]
+	bookList:[Book.bookSchema]
 };
 
 module.exports = new mongoose.Schema(userSchema);

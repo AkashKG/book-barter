@@ -17,7 +17,7 @@ angular
 						function($rootScope, $location, userService,
 								dialogFactory) {
 							userService.getUser().then(function(data) {
-								console.log(data.data);
+								//console.log(data.data);
 								if(data.data.profile){
 									$rootScope.isLoggedIn = true;
 									$rootScope.user=data.data.profile;
@@ -81,8 +81,9 @@ angular
 						'$q',
 						'$http',
 						'$rootScope',
-						'$location',
-						function($q, $http, $rootScope, $location) {
+						'$location', '$filter',
+						function($q, $http, $rootScope, $location, $filter) {
+							var books;
 							return {
 								getUser : function() {
 									return $http.get('api/v1/user/me').success(
@@ -105,6 +106,21 @@ angular
 											return null
 										}
 									});
+								},
+								getUserBooks : function() {
+									return $http.get('api/v1/user/userbooks').success(
+											function(data) {
+													//console.log(data);
+													books = data.books;
+													return data;
+											}).error(function(data, status) {
+										if (status = status.UNAUTHORIZED) {
+											return null
+										}
+									});
+								},
+								getBookById : function(id) {
+									return $filter('filter')(books, id);
 								}
 							};
 						} ])

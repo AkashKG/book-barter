@@ -1,0 +1,70 @@
+<md-dialog flex="">
+	<form name="addBookForm" ng-submit>
+    <md-dialog-content>
+    <div flex layout = row layout-lt-sm = "colum">
+    	<div flex="33">
+    	<md-input-container layout="column" flex class="md-block">
+			<label>Book Name</label> 
+			<input ng-maxlength="100" required
+				name="bookname" ng-model="bookInfo.info.title">
+			<div ng-messages="addBookForm.bookname.$error"
+				ng-show='addBookForm.bookname.$touched'>
+				<div ng-message="required">This is required.</div>
+			</div>
+		</md-input-container>
+		</div>
+		<div flex="33">
+    	<md-input-container layout="column" flex class="md-block">
+			<label>Description</label> 
+			<input ng-maxlength="300" required
+				name="desc" ng-model="bookInfo.info.description">
+			<div ng-messages="addBookForm.desc.$error"
+				ng-show='addBookForm.desc.$touched'>
+				<div ng-message="required">This is required.</div>
+			</div>
+		</md-input-container>
+		</div>
+		<div flex="30">
+    	<md-input-container layout="column" flex class="md-block">
+			<label>ISBN</label> 
+			<input ng-maxlength="30"
+				name="isbn" ng-model="bookInfo.info.isbn">
+		</md-input-container>
+		</div>
+		
+	</div>
+	<div flex layout="row" layout-lt-sm="column">
+		<div flex ="33">
+    	<md-input-container layout="column" flex class="md-block">
+			<label>Picture</label> 
+			<input ng-maxlength="30"
+				name="picture" type="url" ng-model="bookInfo.info.picture">
+		</md-input-container>
+		</div>
+		
+		<div flex = "25">
+		<md-select placeholder="Type"ng-model="bookInfo.info.genre.bookType"
+				ng-click="getCategory()"> <md-option
+				ng-repeat="type in types" value="{{type.name}}">
+			{{type.name}} </md-option> </md-select> 
+			
+			</div>
+			<div flex = "25">
+			<md-select placeholder = "Category"
+				ng-model="bookInfo.info.genre.category" ng-disabled="typeSelected()"> <md-option
+				ng-repeat="subCat in getSubCat()" value="{{subCat.name}}">{{subCat.name}}</md-option>
+			</md-select> 
+		</div>
+		<span flex=""></span>
+	</div>
+    	
+    	
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="center center">
+          <md-button  aria-label="Favorite" class="md-primary" ng-disabled='addBookForm.$invalid'  ng-click = submitBook()>
+            Submit
+          </md-button>
+     </md-dialog-actions>
+     </form>
+     
+</md-dialog>

@@ -1,0 +1,32 @@
+<md-card>
+
+	<md-card-title layout = "row">
+	<span flex="25" flex-lt-sm = "100">
+	
+		<md-select placeholder="Type" ng-model="selectedType"
+				ng-click="getCategory()"> <md-option
+				ng-repeat="type in types" value="{{type.name}}" >
+			{{type.name}} </md-option> </md-select> </span>
+			<span flex="25" flex-lt-sm = "100">
+			<md-select placeholder = "Category"
+				ng-model="selectedCategory"> <md-option
+				ng-repeat="subCat in getSubCat2()" value="{{subCat.name}}" ng-click="limit()">{{subCat.name}}</md-option>
+			</md-select> 
+			</span>
+			<md-button class="md-primary" ng-click="reset()"> Reset
+			</md-button>
+			<span flex="" ></span>
+			<md-button class="md-primary" ng-click="addBook()"> Add Book
+			</md-button>
+			
+	</md-card-title>
+	<md-list>
+  <md-list-item ng-repeat="book in books|filter:selectedType | filter:selectedCategory" ng-click="openBookPreview(book._id)" class="noright">
+    <img alt="{{ person.name }}" ng-src="{{ book.info.picture }}" class="md-avatar" />
+    <p>{{ book.info.title }}</p>
+    <md-icon  aria-label="Send Email" class="md-secondary md-hue-3" ng-if="book.info.available == false">filter_tilt_shift</md-icon>
+    <md-icon  aria-label="Send Email" class="md-hue-3" style="color:#00C853"ng-if="book.info.available == true">filter_tilt_shift</md-icon>
+  </md-list-item>
+</md-list>
+	
+</md-card>

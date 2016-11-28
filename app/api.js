@@ -12,8 +12,42 @@ module.exports = function(wagner) {
 				return res.json({error:'Not logged in.'});			
 			}
 			else{
-				console.log(req.user.profile);
+				//console.log(req.user.profile);
 				res.json({profile:req.user.profile});
+			}
+		}
+	}));
+	
+	api.get('/user/userbooks',wagner.invoke(function(User){
+		return function(req,res){
+			if(req.user==undefined){
+				return res.json({error:'Not logged in.'});			
+			}
+			else{
+				//console.log(req.user.bookList);
+				res.json({books:req.user.bookList});
+			}
+		}
+	}));
+	
+	api.post('/book/newbook', wagner.invoke(function(User) {
+		return function(req, res) {
+			if(req.user._id==undefined){
+				res.json({error:"Error"})
+			}
+			else{
+			if(req.user._id == req.body.__id ){
+				User.update({ _id: req.user._id }, 
+						{ $addToSet: { bookList: req.body } },function(err,done){
+							if(err)
+								res.send(err);
+							res.json({success:'Book was added successfully!'});
+						}
+				);
+			}
+			else{
+				return res.status(status.UNAUTHORIZED).json({error:'Unauthorized access, your account will be reported'});
+			}
 			}
 		}
 	}));
@@ -46,6 +80,7 @@ module.exports = function(wagner) {
 			}
 		}
 	}));
+
 	api.get('/me', isLoggedIn, function(req, res) {// done
 		if (!req.user) {
 			return res.status(status.UNAUTHORIZED).json({
@@ -55,9 +90,23 @@ module.exports = function(wagner) {
 
 		req.user.populate({
 			path : 'data.profile',
-			model : 'Todo'
+			model : 'Book'
 		}, handleOne.bind(null, 'user', res));
 	});
+	api.delete('/user/book/:id/:__id', wagner.invoke(function(User){// done
+		return function(req, res){
+			if(req.user._id == req.params.__id){
+				User.update({_id:req.params.__id},{$pull:{bookList:{_id:req.params.id}}}, function(err,data){
+					if(err)
+						res.send(err);
+					res.json({success:'The notebook was deleted succesfully'})
+				});
+			}
+			else{
+				return res.status(status.UNAUTHORIZED).json({error:'Unauthorized access, your account will be reported'});
+			}
+		}
+	}));
 	return api;
 }
 

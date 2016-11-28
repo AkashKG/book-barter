@@ -24,6 +24,174 @@ angular.module('mainDirectives', [])
             	" This is the era where internet has become a part of social culture. People are connected to each other via internet nowadays, so our creative team thought of "+
             	"sharing knowledge in the society via internet."
 		})
+.controller('bookPreviewController',
+		function($scope, $rootScope, userService, $http, dialogFactory, $mdDialog) {
+			$scope.book = userService.getBookById($rootScope.id)[0];
+			//console.log($rootScope.__id);
+			$scope.deleteBook=function(){
+				console.log($rootScope.__id);
+				$http.delete('/api/v1/user/book/' + $scope.book._id + '/' + $rootScope.__id).success(function(data){
+					userService.getUserBooks().then(function(data, err){
+						$rootScope.books = data.data.books;
+					})
+					$scope.cancel();
+				}).error(function(err){
+					dialogFactory.showToast(err.error);
+				});
+			}
+		})
+.controller('bookController',
+		function($scope, $window, $rootScope, $filter, $mdDialog, $http, dialogFactory, userService) {
+			userService.getUserBooks().then(function(data, err){
+					$rootScope.books = data.data.books;
+			})
+		$scope.reset = function(){
+				$scope.selectedType='';
+				$scope.selectedCategory=''
+			}
+		$scope.getSubCat = function() {
+			if($scope.bookInfo.info.genre.bookType == null || $scope.bookInfo.info.genre.bookType == undefined)
+				return null;
+			var filteredCategory = $filter('filter')($scope.types,$scope.bookInfo.info.genre.bookType);
+			var value = filteredCategory[0].categories;
+			return value;
+		};
+		$scope.getSubCat2 = function() {
+			var filteredCategory2 = $filter('filter')($scope.types,$scope.selectedType);
+			var value = filteredCategory2[0].categories;
+			return value;
+		};
+		$scope.setType = function(val){
+			$scope.bookInfo.info.genre.bookType = val;
+		}
+		$scope.setCat = function(val){
+			$scope.bookInfo.info.genre.category = val;
+		}
+		$scope.bookInfo = {
+				__id:{},
+				info:{
+					date:new Date(),
+					title : null,
+					description : null,
+					picture:null,
+					ISBN:null,
+					available:true,
+					genre:{
+						bookType:null,
+						category:'',
+					}
+				}
+		}
+		
+		$scope.submitBook = function(){
+			$scope.bookInfo.__id = $rootScope.__id;
+			console.log($scope.bookInfo);
+			$http.post('/api/v1/book/newbook',
+					$scope.bookInfo).success(
+					function(data) {
+						dialogFactory.showToast(data.success);
+						userService.getUserBooks().then(function(data, err){
+							$rootScope.books = data.data.books;
+						})
+						$scope.bookInfo = {
+								__id:{},
+								info:{
+									date:new Date(),
+									title : null,
+									description : null,
+									picture:null,
+									ISBN:null,
+									available:true
+								}
+						}
+						$scope.hide();		
+					}).error(function(data) {
+			
+			});
+		}
+		$scope.openBookPreview=function(_id){
+			$rootScope.id = _id;
+			$mdDialog.show({
+				templateUrl : './views/dialogs/bookPreview.html',
+				parent : angular.element(document.body),
+				controller: 'bookPreviewController',
+				scope : $scope.$new(),
+				clickOutsideToClose : true,
+			});
+		}
+//
+
+//
+		$scope.types = [ {
+				name : "Literature",
+				categories : [ {
+					name : "Action & Adventure"
+				}, {
+					name : "Literary Collections"
+				}, {
+					name : "Fantacy"
+				}, {
+					name : "Comics"
+				} ]
+			}, {
+				name : "Non Fiction",
+				categories : [ {
+					name : "Biograhies and Autobiographies"
+				}, {
+					name : "Business & Investing"
+				}, {
+					name : "Health & Fitness"
+				}, {
+					name : "History & Politics"
+				}, {
+					name : "Self Help"
+				} ]
+			}, {
+				name : "Academic",
+				categories : [ {
+					name : "Entrance Exams"
+				}, {
+					name : "School Books"
+				}, {
+					name : "Engineering"
+				}, {
+					name : "Medicine"
+				}, {
+					name : "Commerce"
+				} ]
+			}, {
+				name : "Children & Teens",
+				categories : [ {
+					name : "Fantacy"
+				}, {
+					name : "Romance"
+				}, {
+					name : "Knowledge & Learning"
+				}, {
+					name : "Early Skill Building"
+				}, {
+					name : "Students"
+				} ]
+			} ];
+			$scope.addBook=function(){
+				$mdDialog.show({
+					templateUrl : './views/dialogs/newbook.html',
+					parent : angular.element(document.body),
+					controller: 'bookController',
+					scope : $scope.$new(),
+					clickOutsideToClose : true,
+				});
+			}
+			$scope.cancel = function() {
+				$mdDialog.cancel();
+			};
+
+			$scope.hide = function() {
+				$mdDialog.cancel();
+			};
+
+			
+})
 .controller('profileController',
 		function($scope, $window, $rootScope, userService, $filter, $http) {
 		userService.getUser().then(function(data,err){
@@ -33,8 +201,9 @@ angular.module('mainDirectives', [])
 				$scope.selectedCity = $rootScope.user.profile.address.city;
 				//console.log($rootScope.user.address);
 				userService.getUserId().then(function(data,err){
-				$scope.__id=data.data.id;
+				$rootScope.__id=data.data.id;
 			})
+				
 		}}) 
 		/* - - - For Editing basic info | When edit is clicked ---*/ 
 		$scope.edit = false;
@@ -47,7 +216,7 @@ angular.module('mainDirectives', [])
 				if(data!=null){
 					$rootScope.user=data.data;
 					userService.getUserId().then(function(data,err){
-					$scope.__id=data.data.id;
+					$rootScope.__id=data.data.id;
 				})
 			}})
 			$scope.edit = false;
@@ -63,7 +232,7 @@ angular.module('mainDirectives', [])
 					if(data!=null){
 						$rootScope.user=data.data;
 						userService.getUserId().then(function(data,err){
-						$scope.__id=data.data.id;
+						$rootScope.__id=data.data.id;
 					})
 				}})
 				$scope.edit = false;
@@ -1592,5 +1761,17 @@ angular.module('mainDirectives', [])
   return {
     templateUrl: './views/components/toolbar.html',
     controller: 'loginController'
+  };
+})
+.directive('barterBookarea', function() {
+  return {
+    templateUrl: './views/components/bookarea.html',
+    controller: 'bookController'
+  };
+})
+.directive('barterToolbar', function() {
+  return {
+    templateUrl: './views/components/miniToolbar.html',
+    controller: 'bookController'
   };
 });

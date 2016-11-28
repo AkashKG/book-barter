@@ -2,12 +2,12 @@ var mongoose = require('mongoose');
 var _ = require('underscore');
 var autoIncrement = require('mongoose-auto-increment');
 module.exports = function(wagner){
-	var connection = mongoose.connect('mongodb://localhost:27017/bookbarter');
+	var connection = mongoose.connect('mongodb://localhost:27017/bookbarter_');
 	autoIncrement.initialize(connection);
-	var Todo = mongoose.model('Todo', require('./todo'), 'todos');
+	var Book = mongoose.model('Book', require('./book'), 'books');
 	var User = mongoose.model('User', require('./user'), 'users');
 	var models = {
-			Todo:Todo,
+			Book:Book,
 			User:User
 	}
 	_.each(models, function(value, key) {

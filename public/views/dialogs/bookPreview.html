@@ -1,0 +1,59 @@
+<md-dialog flex="">
+	<md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>{{book.info.title}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon aria-label="Close dialog">close</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+    	<div layout="row">
+    	<div layout="column" flex="25" layout-align="center center">
+				<md-card style="margin-top: 30px;""> <img
+					ng-src="{{book.info.picture}}" alt="book_pic"
+					style="position: relative; border-radius: 4px; padding: 5px 5px 5px 5px; height: 128px; width: 128px; border-color: '#fff'; border-width: 10px;"></img>
+				</md-card>
+		</div>
+		<div layout="column" flex="">
+			<md-card style="background-color:#ECEFF1;">
+			<md-subheader class="md-no-sticky"><md-icon  aria-label="Send Email" class="md-secondary md-hue-3" ng-if="book.info.available == false">filter_tilt_shift</md-icon>
+    <md-icon  aria-label="Send Email" class="md-hue-3" style="color:#00C853"ng-if="book.info.available == true">filter_tilt_shift</md-icon>
+    This book is currently {{book.info.available == true? 'availabe.': 'not available.'}}</md-subheader>
+				
+				<md-card-content>
+				<md-list class="md-dense"> 
+					
+							<md-list-item ng-click="">
+    							<p>Description:  </p>
+    							{{book.info.description}} 
+  							</md-list-item> 
+  							<md-list-item ng-click="">
+    							<p>Genre: </p>
+    							<md-chips>
+      <md-chip>{{book.info.genre.bookType}}</md-chip>
+      <md-chip>{{book.info.genre.category}}</md-chip>
+  							</md-list-item> 
+  							<md-list-item ng-click="">
+    							<p>ISBN: </p>
+    						{{book.info.isbn}}
+  							</md-list-item> 
+  							<md-list-item ng-click="">
+    							<p>Date Uploaded: </p>
+    						{{book.info.date | date:yyyy/mm/ss}} 
+  							</md-list-item>
+						</md-list> 
+				
+				</md-card-content>
+			</md-card>
+		</div>
+		</div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="center center">
+          <md-button  aria-label="Favorite" class="md-primary md-warn"  ng-click = deleteBook()>
+            Delete
+          </md-button>
+     </md-dialog-actions>
+     </form>
+</md-dialog>
