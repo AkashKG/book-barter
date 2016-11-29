@@ -16,6 +16,10 @@
 			<md-button aria-label="facebook" ng-hide="isLoggedIn" 
 				class="md-icon-button" ng-click="facebookLogin()"
 				target="_self"><md-icon md-svg-src="facebook"> </md-icon></md-button>
+			<md-button class="md-icon-button" ng-show="isLoggedIn" ng-href="/notifications" aria-label="Favorite" >
+      			<md-tooltip md-direction="bottom">Notification</md-tooltip>
+          		<md-icon>notifications</md-icon>
+        	</md-button>
 			<md-button class="md-icon-button" ng-show="isLoggedIn" ng-href="/requested" aria-label="Favorite" >
       			<md-tooltip md-direction="bottom">Requested book status</md-tooltip>
           		<md-icon>book</md-icon>

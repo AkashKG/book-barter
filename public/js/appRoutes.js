@@ -22,6 +22,10 @@ angular.module('appRoutes', []).config(
 						templateUrl:'views/pages/requested.html',
 						controller: 'requestedController'
 					})
+					.when('/notifications',{
+						templateUrl:'views/pages/notifications.html',
+						controller: 'notificationController'
+					})
 					$locationProvider.html5Mode(true);
 
 				} ]);

@@ -72,6 +72,12 @@ angular.module('mainDirectives', [])
 		})
 			
 		})
+.controller('notificationController',
+		function($scope, $window, $rootScope, userService) {
+			userService.getUserBooks().then(function(data, err){
+					console.log(data.data);
+			})
+		})
 .controller('bookPreviewController',
 		function($scope, $rootScope, userService, $http, dialogFactory, $mdDialog) {
 			$scope.book = userService.getBookById($rootScope.id)[0];

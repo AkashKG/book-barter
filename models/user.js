@@ -29,6 +29,12 @@ var userSchema={
 			},
 			username:{
 				type:String
+			},
+			oath:{
+				type:String
+			},
+			token:{
+				type:String
 			}
 		}
 	},
