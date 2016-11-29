@@ -32,7 +32,8 @@ var userSchema={
 			}
 		}
 	},
-	bookList:[Book.bookSchema]
+	bookList:[Book.bookSchema],
+	requestedBooks:[mongoose.Schema.Types.ObjectId]
 };
 
 module.exports = new mongoose.Schema(userSchema);

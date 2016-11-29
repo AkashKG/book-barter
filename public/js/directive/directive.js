@@ -19,28 +19,66 @@ angular.module('mainDirectives', [])
 			
 		})
 .controller('homeController',
-		function($scope, $window, $rootScope, $http, userService, $filter) {
+		function($scope, $window, $rootScope, $http, userService, $filter, dialogFactory) {
 			$scope.about = "The Book Barter web-app is a new platform to share the books. Long gone are the days when people will wait for a book " +
             	"to arrive in stock or waiting for price to drop for purchasing book. This website encourages people to share books for free according to their requirements." + 
             	" This is the era where internet has become a part of social culture. People are connected to each other via internet nowadays, so our creative team thought of "+
             	"sharing knowledge in the society via internet."
-            	$scope.query="";
             	
+            	$scope.query="";
+				userService.getAllRequestedBooks().then(function(data, err){
+					$scope.requested = data.data.books;
+					//console.log($scope.requested);
+				})
 				$scope.search=function(){
-				userService.getSomeBooks("we").then(function(data, err){
+				userService.getSomeBooks($scope.query).then(function(data, err){
             		$scope.searched = data.data.data;
 					$scope.searchedBooks = $filter('filter')($scope.searched, $scope.query);
-					console.log($scope.searchedBooks);
+					//console.log($scope.searchedBooks);
 				})
+				
+				}
+				$scope.notInRequestedBooks = function(id){
+					
+					return $scope.requested.indexOf(id) == -1?false:true;
+				}
+				
+				
+				$scope.requestBook = function(bid,aid){
+					console.log(aid  + '  '  + bid);
+					$http.put('/api/v1/user/request/' + aid + '/' + bid).success(
+							function(data) {
+								dialogFactory.showToast(data.success);
+								userService.getAllRequestedBooks().then(function(data, err){
+									$scope.requested = data.data.books;
+									//console.log($scope.requested);
+								})
+							}).error(function(data) {
+					
+					});
 				}
             
+		})
+.controller('requestedController',
+		function($scope, $window, $rootScope, userService) {
+		userService.getAllRequestedBooks().then(function(data, err){
+			$scope.requested = data.data.books;
+			$scope.books=[];
+			for(var i=0;i<$scope.requested.length;i++){
+				userService.getBookById_($scope.requested[i]).then(function(data, err){
+					$scope.books.push(data.data);
+				})
+			}
+		})
+			
 		})
 .controller('bookPreviewController',
 		function($scope, $rootScope, userService, $http, dialogFactory, $mdDialog) {
 			$scope.book = userService.getBookById($rootScope.id)[0];
+			
 			//console.log($rootScope.__id);
 			$scope.deleteBook=function(){
-				console.log($rootScope.__id);
+		//		console.log($rootScope.__id);
 				$http.delete('/api/v1/user/book/' + $scope.book._id + '/' + $rootScope.__id).success(function(data){
 					userService.getUserBooks().then(function(data, err){
 						$rootScope.books = data.data.books;

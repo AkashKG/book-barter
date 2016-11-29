@@ -18,6 +18,10 @@ angular.module('appRoutes', []).config(
 						templateUrl:'views/pages/home.html',
 						controller: 'homeController'
 					})
+					.when('/requested',{
+						templateUrl:'views/pages/requested.html',
+						controller: 'requestedController'
+					})
 					$locationProvider.html5Mode(true);
 
 				} ]);

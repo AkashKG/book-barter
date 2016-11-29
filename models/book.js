@@ -29,7 +29,10 @@ var bookSchema = {
 				type : String
 			}
 		}
-	}
+	},
+	requestors:[mongoose.Schema.Types.ObjectId],
+	trader: mongoose.Schema.Types.ObjectId
+
 }
 
 module.exports = new mongoose.Schema(bookSchema);

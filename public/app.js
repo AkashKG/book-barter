@@ -2,7 +2,7 @@ angular
 		.module(
 				'barterApp',
 				[ 'ngRoute', 'ngMaterial', 'ngAria', 'ngMessages', 'mainDirectives', 'appRoutes'])
-		.config(function($mdIconProvider) {
+		.config(function($mdIconProvider, $mdThemingProvider) {
 				$mdIconProvider
 					.icon('facebook', 'img/facebook.svg', 32)
 					.icon('twitter', 'img/twitter.svg', 32)
@@ -84,11 +84,13 @@ angular
 						'$location', '$filter',
 						function($q, $http, $rootScope, $location, $filter) {
 							var books;
+							var requestedBooks;
 							return {
 								getUser : function() {
 									return $http.get('api/v1/user/me').success(
 											function(data) {
 													//console.log(data);
+													user = data;
 													return data;
 											}).error(function(data, status) {
 										if (status = status.UNAUTHORIZED) {
@@ -119,11 +121,34 @@ angular
 										}
 									});
 								},
+								getAllRequestedBooks : function(){
+									return $http.get('api/v1/user/requestedBooks').success(
+											function(data) {
+												
+													requestedBooks = data.books;
+													return data;
+											}).error(function(data, status) {
+										if (status = status.UNAUTHORIZED) {
+											return null
+										}
+									});
+								},
 								getBookById : function(id) {
+									console.log(books);
 									return $filter('filter')(books, id);
 								},
 								getSomeBooks : function(query) {
 									return $http.get('/api/v1/universe/book/' + query).success(
+											function(data) {
+													return data;
+											}).error(function(data, status) {
+										if (status = status.UNAUTHORIZED) {
+											return null
+										}
+									});
+								},
+								getBookById_ : function(id) {
+									return $http.get('/api/v1/universe/bookbyid/' + id).success(
 											function(data) {
 													return data;
 											}).error(function(data, status) {
