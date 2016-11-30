@@ -73,38 +73,28 @@ angular.module('mainDirectives', [])
 			
 		})
 .controller('notificationController',
-		function($scope, $http, $window, $rootScope, userService) {
+		function($scope, $http, $window, $rootScope, userService, $filter) {
+			$scope.askedBooks = [];
 			userService.getUserBooks().then(function(data, err){
-					$scope.books = data.data.books;
-					$scope.askedBooks = [];
-					$scope.req = [{
-						requestors:[{
-							id:'',
-							name:'',
-						}]
-					}]
-					for(var i=0;i<$scope.books.length;i++){
-						if($scope.books[i].requestors.length > 0){
-							angular.forEach($scope.books, function(value1, i) {
-							    angular.forEach(value1.requestors, function(value2, j) {
-							    	userService.getUserById(value2).then(function(data, err){
-							    		$scope.req[i].requestors.push(data.data.user);
-							    	})
-							    //	console.log($scope.req[i].requestors)
-							    });
-							    
+					$scope.books = data.data.books;	
+					
+					angular.forEach($scope.books, function(book,i) {
+						if(book.requestors.length>0)
+							$scope.askedBooks.push(book);
+							var requests=[]
+							angular.forEach(book.requestors, function(request, j) {
+								userService.getUserById(request).then(function(data,err){
+									data.data.user.id = request;
+									requests.push(data.data.user);
+								})
 							});
-							$scope.askedBooks.push($scope.books[i]);
-						$scope.req[i].requestors.shift();	
-						}
-					}
-					//console.log($scope.req);
-					//console.log($scope.askedBooks);
+							$scope.askedBooks[i].req = requests;
+					});
 			})
-			
 			$scope.acceptTrade = function(tid, bid){
 				$http.put('/user/acceptTrade/' + tid + '/' + bid)
 			}
+			console.log($scope.askedBooks)
 		})
 .controller('bookPreviewController',
 		function($scope, $rootScope, userService, $http, dialogFactory, $mdDialog) {
