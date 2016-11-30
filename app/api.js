@@ -89,11 +89,11 @@ module.exports = function(wagner) {
 					res.json({success:'Cannot request yourself a book.'})
 				}
 				else{
-					var bid = req.params._bid;
+					var bid = req.user._id;
 					var pos = 'bookList.$.requestors';
 					var obj = {};
 					obj[pos] = bid;
-					User.update({_id:req.params._aid, 'bookList._id':req.params._bid},{"$set":obj}, function(err, data){
+					User.update({_id:req.params._aid, 'bookList._id':req.params._bid},{"$addToSet":obj}, function(err, data){
 						User.update({_id:req.user._id},{"$addToSet":{requestedBooks:req.params._bid}}, function(err, data){
 							res.json({success:"Requested"});
 						})
@@ -105,7 +105,29 @@ module.exports = function(wagner) {
 			}
 		}
 	}))
-	
+		api.get('/user/acceptTrade/:_tid/:_bid', wagner.invoke(function(User){//a: author, b: book
+		return function(req, res){
+			if(req.user._id){
+				if(req.user._id == req.params._tid){
+					res.json({success:'Cannot request yourself a book.'})
+				}
+				else{
+					var bid = req.user._tid;
+					var pos = 'bookList.$.trader';
+					var obj = {};
+					obj[pos] = bid;
+					User.update({_id:req.user._id, 'bookList._id':req.params._bid},{'bookList': {$elemMatch: {'_id': req.params._bid}}},{"$set":obj}, function(err, data){
+						//User.update({_id:req.user._id},{"$addToSet":{requestedBooks:req.params._bid}}, function(err, data){
+							res.json({success:"accepted"});
+					//	})
+					})
+				}
+			}
+			else{
+				return res.status(status.UNAUTHORIZED).json({error:'Unauthorized access, your account will be reported'});	
+			}
+		}
+	}))
 	api.get('/universe/bookbyid/:_bid', wagner.invoke(function(User){
 		return function(req, res){
 			User.find({'bookList._id' : req.params._bid},{profile:0, requestedBooks:0, 'bookList.requestors':0, bookList : {$elemMatch : { _id : req.params._bid}}}, function(err,data){
@@ -116,7 +138,20 @@ module.exports = function(wagner) {
 			})
 		}
 	}))
-	
+	api.get('/universe/userbyid/:_id', wagner.invoke(function(User){
+		return function(req, res){
+			User.find({_id:req.params._id},{requestedBooks:0, bookList:0, 'profile.data':0, 'profile.address':0}, function(err,user){
+				res.json({user:user[0].profile});
+			})
+		}
+	}))
+	api.get('/universe/userbyid_basic/:_id', wagner.invoke(function(User){
+		return function(req, res){
+			User.find({_id:req.params._id},{requestedBooks:0, 'bookList.requestors':0, 'profile.data':0}, function(err,user){
+				res.json({user:user[0]});
+			})
+		}
+	}))
 	api.get('/user/me/id',wagner.invoke(function(User){
 		return function(req,res){
 			if(req.user==undefined){

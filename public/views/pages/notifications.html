@@ -1,9 +1,30 @@
-<div layout="row" layout-lt-sm="column">
-	<div layout="column" flex = "20" flex-lt-sm="0">
-	</div>
-	<div layout="column" flex = "60" flex-lt-sm="100">
-	
-	</div>
-	<div layout="column" flex = "20" flex-lt-sm="0">
-	</div>
+<div layout="row" layout-lt-sm = "column" flex="100" layout-wrap>
+		<div flex = "33" flex-lt-sm = "100" ng-repeat="book in askedBooks">
+			<md-card  md-theme-watch>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">{{book.info.title}}</span>
+            <span class="md-subhead">{{book.info.genre.category}}</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+        	<md-list  flex>
+       <!-- Currently only for 1 user. -->
+        	<md-subheader class="md-no-sticky">Requested by</md-subheader>
+        <md-list-item class="md-2-line"  ng-repeat="u in req[$index].requestors">
+       
+          <md-icon class="md-avatar"  ><img ng-src="{{u.picture}}" class="md-avatar" ></md-icon>
+       
+          <div class="md-list-item-text" >
+            <a style="text-decoration:none" ng-href="/profile/{{book.requestors[$index]}}"> {{u.name}}</a>
+            <p> Please consider my bet </p>
+          </div>
+          <md-button class="md-secondary md-icon-button" ng-click="acceptTrade(book.requestors[0], book._id)" aria-label="call">
+            <md-icon >check</md-icon>
+          </md-button>
+        </md-list-item>
+      </md-list>
+      </md-card>
+
+		</div>
 </div>

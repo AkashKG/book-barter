@@ -1,0 +1,50 @@
+<div flex layout="column"
+	style="background-size: cover; background-repeat: no-repeat; background-position: center center;">
+	<!-- DIVIDE THE PAGE IN THE RATIO 25:75 FOR FLEX -->
+	<div flex layout="row" layout-xs="column" layout-sm="row">
+		<div flex-gt-sm="25" flex-xs flex-sm="40" layout="column">
+					<md-content layout=column>
+			
+		<div layout="row" layout-align="center center">
+			<md-card style="margin-top: 30px;""> <img
+				ng-src="{{user.profile.picture}}" alt="profile_pic"
+				style="position: relative; border-radius: 4px; padding: 5px 5px 5px 5px; height: 128px; width: 128px; border-color: '#fff'; border-width: 10px;"></img>
+			</md-card>
+		</div>
+		<div layout="row" layout-align="center center">
+			<span class="md-headline">{{user.profile.name}}</span>
+		</div>
+	
+			</md-content>
+			<!-- Start | -> without edit clicked -->
+			<md-content layout="column" >
+				<md-card style="background-color:#ECEFF1;"> 
+					<md-subheader class="md-no-sticky">Basic Information</md-subheader>
+						<md-list class="md-dense"> 
+							<md-list-item ng-click="">
+    							<md-icon>person</md-icon>
+    							<p> {{user.profile.name}} </p>
+  							</md-list-item> 
+  							<md-list-item ng-click="">
+    							<md-icon>email</md-icon>
+    							<p> {{user.profile.data.email}} </p>
+  							</md-list-item> 
+  							<md-list-item ng-click="">
+    							<md-icon>place</md-icon>
+    							<p> {{user.profile.address.city}}, {{user.profile.address.state}} </p>
+  							</md-list-item> 
+						</md-list> 
+          	</md-card>	 
+				</md-content>	
+		</div>
+		<div flex="" layout="column" >
+			<!-- <barter-about></barter-about>
+			<barter-toolbar></barter-toolbar>	
+			<barter-bookarea></barter-bookarea> -->
+		</div>
+		
+	</div>
+	<div flex layout="row" layout-xs="column" layout-sm="row">
+		
+	</div>
+</div>

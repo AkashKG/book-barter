@@ -134,7 +134,7 @@ angular
 									});
 								},
 								getBookById : function(id) {
-									console.log(books);
+									//console.log(books);
 									return $filter('filter')(books, id);
 								},
 								getSomeBooks : function(query) {
@@ -150,6 +150,27 @@ angular
 								getBookById_ : function(id) {
 									return $http.get('/api/v1/universe/bookbyid/' + id).success(
 											function(data) {
+													return data;
+											}).error(function(data, status) {
+										if (status = status.UNAUTHORIZED) {
+											return null
+										}
+									});
+								},
+								getUserById : function(id) {
+									return $http.get('/api/v1/universe/userbyid/' + id).success(
+											function(data) {
+													return data;
+											}).error(function(data, status) {
+										if (status = status.UNAUTHORIZED) {
+											return null
+										}
+									});
+								},
+								getUserById_ : function(id) {
+									return $http.get('/api/v1/universe/userbyid_basic/' + id).success(
+											function(data) {
+												//console.log(data);
 													return data;
 											}).error(function(data, status) {
 										if (status = status.UNAUTHORIZED) {

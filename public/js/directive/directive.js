@@ -73,10 +73,38 @@ angular.module('mainDirectives', [])
 			
 		})
 .controller('notificationController',
-		function($scope, $window, $rootScope, userService) {
+		function($scope, $http, $window, $rootScope, userService) {
 			userService.getUserBooks().then(function(data, err){
-					console.log(data.data);
+					$scope.books = data.data.books;
+					$scope.askedBooks = [];
+					$scope.req = [{
+						requestors:[{
+							id:'',
+							name:'',
+						}]
+					}]
+					for(var i=0;i<$scope.books.length;i++){
+						if($scope.books[i].requestors.length > 0){
+							angular.forEach($scope.books, function(value1, i) {
+							    angular.forEach(value1.requestors, function(value2, j) {
+							    	userService.getUserById(value2).then(function(data, err){
+							    		$scope.req[i].requestors.push(data.data.user);
+							    	})
+							    //	console.log($scope.req[i].requestors)
+							    });
+							    
+							});
+							$scope.askedBooks.push($scope.books[i]);
+						$scope.req[i].requestors.shift();	
+						}
+					}
+					//console.log($scope.req);
+					//console.log($scope.askedBooks);
 			})
+			
+			$scope.acceptTrade = function(tid, bid){
+				$http.put('/user/acceptTrade/' + tid + '/' + bid)
+			}
 		})
 .controller('bookPreviewController',
 		function($scope, $rootScope, userService, $http, dialogFactory, $mdDialog) {
@@ -94,6 +122,13 @@ angular.module('mainDirectives', [])
 					dialogFactory.showToast(err.error);
 				});
 			}
+		})
+.controller('userProfileController',
+		function($scope, $rootScope, userService, $http, dialogFactory, $mdDialog, $routeParams) {
+			userService.getUserById_($routeParams.userId).then(function(data, err){
+				$scope.user = data.data.user;
+				//console.log($scope.user)
+			});
 		})
 .controller('bookController',
 		function($scope, $window, $rootScope, $filter, $mdDialog, $http, dialogFactory, userService) {

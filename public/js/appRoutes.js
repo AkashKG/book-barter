@@ -26,6 +26,10 @@ angular.module('appRoutes', []).config(
 						templateUrl:'views/pages/notifications.html',
 						controller: 'notificationController'
 					})
+					.when('/profile/:userId',{
+						templateUrl:'views/pages/userprofile.html',
+						controller: 'userProfileController'
+					})
 					$locationProvider.html5Mode(true);
 
 				} ]);
