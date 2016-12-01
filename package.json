@@ -13,6 +13,7 @@
 	    "express-session":"latest",
 	    "mongoose": "4.1.12",
 	    "wagner-core": "0.1.0",
+	    "bower": "latest",
 		"body-parser" : "~1.4.2",
 		"method-override" : "~2.0.2",
 	    "passport": "latest",
