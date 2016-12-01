@@ -15,7 +15,7 @@ function setupAuth(User, app) {
 
 	        clientID        : '38091033467-rgm3haomjtqqlk5s8abt0kgrms4pv29n.apps.googleusercontent.com',
 	        clientSecret    : 'ryRG7g1p1TN0IAtGqVg9Fysc',
-	        callbackURL     : 'http://localhost:8181/auth/google/callback',
+	        callbackURL     : 'https://book-barter.herokuapp.com/auth/google/callback',
 
 	    },
 	    function(token, refreshToken, profile, done) {
