@@ -8,10 +8,13 @@
           </md-card-title-text>
         </md-card-title>
         <md-card-content>
-        	<md-list  flex>
+        <md-switch ng-model="data.cb1" class="md-primary" aria-label="Switch 1">
+    {{ data.cb1 == true ? 'Hide' : 'Show' }} requests 
+  	</md-switch>
+        	<md-list  flex ng-hide = "!data.cb1">
        <!-- Currently only for 1 user. -->
-        	<md-subheader class="md-no-sticky">Requested by</md-subheader>
-        <md-list-item class="md-2-line"  ng-repeat="u in book.req">
+        
+        <md-list-item class="md-2-line"  ng-repeat="u in book.req" ng-class="{'selected':book.trader===u.id}" >
        
           <md-icon class="md-avatar"  ><img ng-src="{{u.picture}}" class="md-avatar" ></md-icon>
        
@@ -19,7 +22,7 @@
             <a style="text-decoration:none" ng-href="/profile/{{u.id}}"> {{u.name}}</a>
             <p> Please consider my bet </p>
           </div>
-          <md-button class="md-secondary md-icon-button" ng-click="acceptTrade(u.id, book._id)" aria-label="call">
+          <md-button class="md-secondary md-icon-button" ng-hide="book.trader" ng-click="acceptTrade(u.id, book._id)" aria-label="call">
             <md-icon >check</md-icon>
           </md-button>
         </md-list-item>

@@ -105,21 +105,20 @@ module.exports = function(wagner) {
 			}
 		}
 	}))
-		api.get('/user/acceptTrade/:_tid/:_bid', wagner.invoke(function(User){//a: author, b: book
+		api.put('/user/acceptTrade/:_tid/:_bid', wagner.invoke(function(User){//a: trader, b: book
 		return function(req, res){
 			if(req.user._id){
 				if(req.user._id == req.params._tid){
 					res.json({success:'Cannot request yourself a book.'})
 				}
 				else{
-					var bid = req.user._tid;
-					var pos = 'bookList.$.trader';
-					var obj = {};
-					obj[pos] = bid;
-					User.update({_id:req.user._id, 'bookList._id':req.params._bid},{'bookList': {$elemMatch: {'_id': req.params._bid}}},{"$set":obj}, function(err, data){
-						//User.update({_id:req.user._id},{"$addToSet":{requestedBooks:req.params._bid}}, function(err, data){
-							res.json({success:"accepted"});
-					//	})
+					User.update({'bookList._id':req.params._bid, _id:req.user._id},{$set:{'bookList.$.trader':req.params._tid, 'bookList.$.info.available':false}}, function(err,done){
+						//console.log(err);
+						if(err){
+							res.json({error:'Something went wrong'})
+						}
+						//console.log(done);
+						res.json({success:'Success'})
 					})
 				}
 			}

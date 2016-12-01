@@ -73,7 +73,7 @@ angular.module('mainDirectives', [])
 			
 		})
 .controller('notificationController',
-		function($scope, $http, $window, $rootScope, userService, $filter) {
+		function($scope, $http, $window, $rootScope, userService, $filter, $route) {
 			$scope.askedBooks = [];
 			userService.getUserBooks().then(function(data, err){
 					$scope.books = data.data.books;	
@@ -91,10 +91,15 @@ angular.module('mainDirectives', [])
 							$scope.askedBooks[i].req = requests;
 					});
 			})
+			
 			$scope.acceptTrade = function(tid, bid){
-				$http.put('/user/acceptTrade/' + tid + '/' + bid)
+				console.log(tid);
+				console.log(bid);
+				$http.put('/api/v1/user/acceptTrade/' + tid + '/' + bid).success(function(data){
+					$route.reload();
+				})
 			}
-			console.log($scope.askedBooks)
+			//console.log($scope.askedBooks)
 		})
 .controller('bookPreviewController',
 		function($scope, $rootScope, userService, $http, dialogFactory, $mdDialog) {

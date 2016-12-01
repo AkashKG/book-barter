@@ -39,7 +39,7 @@
         	{{book.bookList[0].info.description}}
         </md-card-content>
         <md-card-actions layout="row" layout-align="end center">
-          <md-button class="md-primary md-raised" ng-disabled = "notInRequestedBooks(book.bookList[0]._id)"  ng-click="requestBook(book.bookList[0]._id, book.bookList[0].__id)">Request</md-button>
+          <md-button class="md-primary md-raised" ng-disabled = "notInRequestedBooks(book.bookList[0]._id)"  ng-show = "book.bookList[0].info.available" ng-click="requestBook(book.bookList[0]._id, book.bookList[0].__id)">Request</md-button>
         </md-card-actions>
       </md-card>
 
