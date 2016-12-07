@@ -176,9 +176,9 @@ module.exports = function(wagner) {
 		}, handleOne.bind(null, 'user', res));
 	});
 	/* Optimize Further */
-	api.get('/universe/book/:query', wagner.invoke(function(User, Book) {// done
+	api.get('/universe/book/:query/:state/:city', wagner.invoke(function(User, Book) {// done
 		return function(req, res) {
-			User.find({},{profile:0, _id:0, requestedBooks:0, 'bookList': {$elemMatch: {'info.title': req.params.query}}}, function(err, data){
+			User.find({'profile.address.state' : req.params.state, 'profile.address.city' : req.params.city},{profile:0, _id:0, requestedBooks:0, 'bookList': {$elemMatch: {'info.title': req.params.query}}}, function(err, data){
 				res.json({data:data});
 			})
 		};

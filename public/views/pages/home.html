@@ -12,16 +12,37 @@
      <form ng-submit="search()">
      <div layout="row">
      	<div flex=""></div>
-     	<div layout-align = "center center">
+     	
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>State</label>
+     	<md-select placeholder="State" required ng-model="user.profile.address.state" >
+      <md-option value="{{state.name}}" ng-repeat="state in states_" ng-click = "change_(state.name)">{{state.name}}</md-option>
+    </md-select>
+    </md-input-container>
+    
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>City</label>
+    			<md-select placeholder="City" required ng-model="user.profile.address.city" ng-disabled ="isSelected()" ng-click="selectCities_()" >
+      <md-option value="{{city.city}}" ng-repeat = "city in getCity_()" ng-click = "changeCity_(city.city)">{{city.city}}</md-option>
+    </md-select>
+    </md-input-container>
      		<md-input-container layout="column" flex class="md-block">
 			<label>Search Book</label> 
 			<input ng-maxlength="100" required
 				name="bookname" ng-model="query">
 		</md-input-container>
-		</div>
+
 		<md-button type="submit" style="height:48px !important; width:48px !important"class="md-primary md-raised md-icon-button"><md-icon>search</md-icon></md-button>
 		<div flex=""></div>
+		
 		</div>
+		<div layout="row">
+			<div flex = "" >
+		</div>
+		
+    <div flex=""></div>
+		</div>
+		
 	</form>
 	<div layout="row" layout-lt-sm = "column" flex="100" layout-wrap>
 		<div flex = "20" flex-lt-sm = "100" ng-repeat="book in searchedBooks">
@@ -39,7 +60,7 @@
         	{{book.bookList[0].info.description}}
         </md-card-content>
         <md-card-actions layout="row" layout-align="end center">
-          <md-button class="md-primary md-raised" ng-disabled = "notInRequestedBooks(book.bookList[0]._id)"  ng-show = "book.bookList[0].info.available" ng-click="requestBook(book.bookList[0]._id, book.bookList[0].__id)">Request</md-button>
+          <md-button class="md-primary md-raised" ng-disabled = "notInRequestedBooks(book.bookList[0]._id)"  ng-show = "book.bookList[0].info.available && $root.isLoggedIn" ng-click="requestBook(book.bookList[0]._id, book.bookList[0].__id)">Request</md-button>
         </md-card-actions>
       </md-card>
 
