@@ -42,6 +42,18 @@ module.exports = function(wagner) {
 		}
 	}));
 	
+	api.get('/user/acceptedBooks',wagner.invoke(function(User){
+		return function(req,res){
+			if(req.user==undefined){
+				return res.json({error:'Not logged in.'});			
+			}
+			else{
+				// console.log(req.user.bookList);
+				res.json({books:req.user.acceptedBooks});
+			}
+		}
+	}));
+	
 	api.post('/book/newbook', wagner.invoke(function(User) {
 		return function(req, res) {
 			if(req.user._id==undefined){
@@ -118,7 +130,12 @@ module.exports = function(wagner) {
 							res.json({error:'Something went wrong'})
 						}
 						//console.log(done);
-						res.json({success:'Success'})
+						User.update({_id:req.params._tid},{"$addToSet":{acceptedBooks:req.params._bid}}, {"$pull":{requestedBooks:req.params._bid}}, function(err,data){
+							User.update({_id:req.params._tid}, {"$pull":{requestedBooks:req.params._bid}}, function(err,data_){
+								//console.log(data_);
+								res.json({success:'Success'})
+							})
+						})
 					})
 				}
 			}
@@ -127,6 +144,25 @@ module.exports = function(wagner) {
 			}
 		}
 	}))
+	
+	api.put('/user/returnbook/:_bid/:__id', wagner.invoke(function(User){
+		return function(req, res){
+			if(req.user._id){
+				User.update({_id:req.user._id}, {"$pull":{acceptedBooks:req.params._bid}}, function(err, data){
+					//console.log(req.params.__id);
+					//console.log(req.params._bid);
+					User.update({_id:req.params.__id , 'bookList._id': req.params._bid}, {"$pull":{'bookList.$.requestors':req.user._id}}, function(err, data){
+						//console.log(data);
+						User.update({_id:req.params.__id, 'bookList._id': req.params._bid},{$set:{'bookList.$.info.available': true, 'bookList.$.trader':null}}, function(err, data){
+							//console.log(data);
+							res.json({succes:'success'})
+						})
+					})
+				})
+			}
+		}
+	}))
+	
 	api.get('/universe/bookbyid/:_bid', wagner.invoke(function(User){
 		return function(req, res){
 			User.find({'bookList._id' : req.params._bid},{profile:0, requestedBooks:0, 'bookList.requestors':0, bookList : {$elemMatch : { _id : req.params._bid}}}, function(err,data){

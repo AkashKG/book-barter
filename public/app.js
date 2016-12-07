@@ -132,6 +132,17 @@ angular
 										}
 									});
 								},
+								getAllAcceptedBooks : function(){
+									return $http.get('api/v1/user/acceptedBooks').success(
+											function(data){
+												acceptedBooks= data.books;
+												return data;
+											}).error(function(data, status){
+												if(status = status.UNAUTHORIZED){
+													return null;
+												}
+											});
+								},
 								getBookById : function(id) {
 									//console.log(books);
 									return $filter('filter')(books, id);

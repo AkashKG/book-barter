@@ -78,7 +78,7 @@ angular.module('mainDirectives', [])
             
 		})
 .controller('requestedController',
-		function($scope, $window, $rootScope, userService) {
+		function($scope, $window, $rootScope, userService, $route, $http) {
 		userService.getAllRequestedBooks().then(function(data, err){
 			$scope.requested = data.data.books;
 			$scope.books=[];
@@ -88,7 +88,22 @@ angular.module('mainDirectives', [])
 				})
 			}
 		})
-			
+		
+		userService.getAllAcceptedBooks().then(function(data, err){
+			$scope.accepted = data.data.books;
+			$scope.acceptedBooks=[];
+			for(var i=0;i<$scope.accepted.length;i++){
+				userService.getBookById_($scope.accepted[i]).then(function(data, err){
+					$scope.acceptedBooks.push(data.data);
+				})
+			}
+		})
+		$scope.returnBook = function(id, __id){
+			console.log(__id);
+			$http.put('/api/v1/user/returnbook/' + id + '/' + __id).success(function(data){
+				$route.reload();
+			})
+		}
 		})
 .controller('notificationController',
 		function($scope, $http, $window, $rootScope, userService, $filter, $route) {
@@ -109,7 +124,7 @@ angular.module('mainDirectives', [])
 							$scope.askedBooks[i].req = requests;
 					});
 			})
-			
+			console.log($scope.askedBooks);
 			$scope.acceptTrade = function(tid, bid){
 				console.log(tid);
 				console.log(bid);

@@ -1,3 +1,5 @@
+
+<md-subheader ng-show="books.length > 0">Requested Books</md-subheader>
 <div layout="row" layout-lt-sm = "column" flex="100" layout-wrap>
 		<div flex = "20" flex-lt-sm = "100" ng-repeat="book in books">
 			<md-card  md-theme-watch>
@@ -15,6 +17,29 @@
         </md-card-content>
         <md-card-actions layout="row" layout-align="end center">
           <md-button class="md-warn md-raised"  >Cancel</md-button>
+        </md-card-actions>
+      </md-card>
+
+		</div>
+</div>
+<md-subheader ng-show="acceptedBooks.length > 0">Accepted Books</md-subheader>
+<div layout="row" layout-lt-sm = "column" flex="100" layout-wrap>
+		<div flex = "20" flex-lt-sm = "100" ng-repeat="book in acceptedBooks">
+			<md-card  md-theme-watch>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">{{book.data.info.title}}</span>
+            <span class="md-subhead">{{book.data.info.genre.category}}</span>
+          </md-card-title-text>
+          <md-card-title-media>
+            <div class="md-media-sm card-media"><img ng-src="{{book.data.info.picture}}"></div>
+          </md-card-title-media>
+        </md-card-title>
+        <md-card-content>
+        	{{book.data.info.description}}
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+          <md-button class="md-primary md-raised"  ng-click="returnBook(book.data._id, book.data.__id)">Return</md-button>
         </md-card-actions>
       </md-card>
 
